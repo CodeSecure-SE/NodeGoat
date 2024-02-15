@@ -27,7 +27,7 @@
         "type": "shell",
         "label": "JavaScript: Import SARIF to CS",
         "command": [
-            "codesonar analyze nodegoat https://duck.dyndns.org:7340 ",
+            "codesonar analyze nodegoat -hubuser ${config:codesonar.hubUser} -auth certificate -name ${input:codesonarAnalysisName} -conf-file codesonar.conf -project OSS-Projects/nodegoat-GitHub/developers/${config:codesonar.hubUser}  ${config:codesonar.hubAddress}",
             "codesonar import_sarif.py codesonar-scan.sarif ",
                 "-include-sources '**/*.js'",
                 "-exclude-sources 'node_modules/**/*' ",
