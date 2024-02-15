@@ -1,5 +1,6 @@
 # Node modules
 node_modules
+nodegoat.prj_files
 
 # Logs and databases
 *.log
