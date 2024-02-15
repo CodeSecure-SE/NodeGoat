@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+    {
+    "id": "codesonarAnalysisName",
+    "type": "promptString",
+    "description": "CodeSonar analysis name",
+    "default": "JS-Analysis-1234"
+    }
+    ],
+    "tasks": [
+    {
+    "type": "shell",
+    "label": "JavaScript: npm install & lint",
+    "command": [
+        "npm install && npm install --save-dev @microsoft/eslint-formatter-sarif &&",        
+        "npx eslint --no-inline-config -f @microsoft/eslint-formatter-sarif -o codesonar-scan.sarif . || true "
+    ],
+    "group": "build",
+    "detail": "builder: npm",
+    "presentation": {
+        "showReuseMessage": false,
+        "panel": "new"
+    }
+    },
+    {
+        "type": "shell",
+        "label": "JavaScript: Import SARIF to CS",
+        "command": [
+            "codesonar analyze nodegoat https://duck.dyndns.org:7340 ",
+            "codesonar import_sarif.py codesonar-scan.sarif ",
+                "-include-sources '**/*.js'",
+                "-exclude-sources 'node_modules/**/*' ",
+                "-exclude-sources 'test/**/*' "
+        ],
+        "group": "build",
+        "detail": "builder: npm", 
+        "presentation": {
+            "showReuseMessage": false,
+            "panel": "new"
+        }
+        }
+    ]
+}
