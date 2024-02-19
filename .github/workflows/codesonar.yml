@@ -1,4 +1,4 @@
-name: CodeSonar JS Scan
+name: CodeSonar JS Scanner
 on:
   push:                  
     branches:
