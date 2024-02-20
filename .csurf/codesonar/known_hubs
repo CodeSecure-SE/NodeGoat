@@ -1,0 +1,12 @@
+[
+    {
+        "hostport" : "partnerdemo.codesonar.com",
+        "cmd_machine" : "f96c344dfec8",
+        "https" : true
+    },
+    {
+        "hostport" : "duck.dyndns.org:7340",
+        "cmd_machine" : "bbc76a9aaba1",
+        "https" : true
+    }
+]
