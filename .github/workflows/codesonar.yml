@@ -48,9 +48,9 @@ jobs:
           path: cso-scripts
       - name: Build and Analyze
         run: | 
-             npm install
-             npm install --save-dev @microsoft/eslint-formatter-sarif
-             npx eslint --no-inline-config -f @microsoft/eslint-formatter-sarif -o codesonar-scan.sarif . || true
+             npm install &&
+             npm install --save-dev @microsoft/eslint-formatter-sarif &&
+             npx eslint --no-inline-config -f @microsoft/eslint-formatter-sarif -o codesonar-scan.sarif . || true &&
              python3 cso-scripts/build_and_analyze.py codesonar.conf codesonar import_sarif.py codesonar-scan.sarif -include-sources '**/*.js' -exclude-sources 'node_modules/**/*' -exclude-sources 'test/**/*'
       - name: Upload SARIF to GitHub #Use this if you do not have GitHub Enterprise
         if: ${{ github.event.pull_request }}
