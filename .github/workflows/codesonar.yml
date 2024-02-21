@@ -1,11 +1,11 @@
-name: CodeSonar
+name: CodeSonar JS Scanner
 on:
-  push:                  # Only run onces the Pull request is created
+  push:                  
     branches:
       - 'feature/**'               # Feature Branches
   pull_request:
     branches:
-      - 'release/**'       
+      - 'release/**'       # on Pull request is created
   
 jobs:
   CodeSonar_Analyze:
@@ -28,12 +28,14 @@ jobs:
       CSONAR_HUB_USER: "${{ secrets.CSONAR_HUB_USER }}"
       CSONAR_HUB_PASSWORD: "${{ secrets.CSONAR_HUB_PASS }}"
       CSONAR_CSHOME: /opt/codesonar
-      CS_USER_HOME: /__w/ripgrep/ripgrep
+      CS_USER_HOME: /__w/NodeGoat/NodeGoat
       COMMIT_HASH: ${{ github.sha }}
-      REPO_URL: "https://github.com/CodeSecure-SE/nodegoat"    # the github.repositoryUrl is not an http-link.
+      REPO_URL: "https://github.com/CodeSecure-SE/nodegoat" 
       TARGET: ${{ github.base_ref }}
       IS_PR: ${{ github.event_name }}
     steps:
+      - name: Set parallelism
+        run:  echo "PARALLEL=`nproc`" >> $GITHUB_ENV
       - name: Checkout 
         uses: actions/checkout@v4
       - name: Safe directory
@@ -46,12 +48,10 @@ jobs:
           path: cso-scripts
       - name: Build and Analyze
         run: | 
-           mv /home/user/.cargo /github/home/.cargo
-           source /github/home/.cargo/env
-           rustup default stable
-           cargo clippy --no-deps --message-format=json | clippy-sarif > codesonar-scan.sarif
-           python3 cso-scripts/build_and_analyze.py  codesonar.conf codesonar import_sarif.py codesonar-scan.sarif -include-sources '**/*.rs'
-        shell: bash
+             npm install
+             npm install --save-dev @microsoft/eslint-formatter-sarif
+             npx eslint --no-inline-config -f @microsoft/eslint-formatter-sarif -o codesonar-scan.sarif . || true
+             python3 cso-scripts/build_and_analyze.py codesonar.conf codesonar import_sarif.py codesonar-scan.sarif -include-sources '**/*.js' -exclude-sources 'node_modules/**/*' -exclude-sources 'test/**/*'
       - name: Upload SARIF to GitHub #Use this if you do not have GitHub Enterprise
         if: ${{ github.event.pull_request }}
         uses: actions/upload-artifact@v3
@@ -63,9 +63,8 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with: 
           filePath: warnings.md
-# Disabling for now, too many warnings, see https://codesecure.atlassian.net/browse/CSO-3965
-#      - name: Upload SARIF results
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: warnings.sarif
-#          category: "CodeSecure CodeSonar"            
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: warnings.sarif
+          category: "CodeSecure CodeSonar"            
