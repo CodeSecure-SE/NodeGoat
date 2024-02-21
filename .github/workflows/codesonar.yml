@@ -2,7 +2,7 @@ name: CodeSonar JS Scanner
 on:
   push:                  
     branches:
-      - 'feature/**'               # Feature Branches
+      - 'release/**'               # Feature Branches
   pull_request:
     branches:
       - 'release/**'       # on Pull request is created
