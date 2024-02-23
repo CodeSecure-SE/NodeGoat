@@ -1,6 +1,7 @@
 # Node modules
 node_modules
 nodegoat.prj_files
+nodegoat.*
 
 # Logs and databases
 *.log
@@ -30,3 +31,4 @@ test/e2e/videos/
 
 # ignore Snyk Code scanner files
 .dccache
+
