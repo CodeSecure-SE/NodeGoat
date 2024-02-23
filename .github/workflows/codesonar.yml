@@ -14,7 +14,6 @@ jobs:
     container:
       image: ghcr.io/codesecure-se/node-cso-builder:8.1b0
       credentials:
-        credentials:
           username: ${{ github.actor }}
           password: ${{ secrets.github_token }}
     env:
