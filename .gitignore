@@ -32,3 +32,5 @@ test/e2e/videos/
 # ignore Snyk Code scanner files
 .dccache
 
+package-lock.json
+package-lock.json
